@@ -1,0 +1,25 @@
+# Игнорировать всё по умолчанию
+*
+
+# Явно разрешить необходимые файлы и папки
+!.gitignore
+!docker-compose.yml*
+!app-deadline.jar
+!schema.sql
+
+# Разрешить структуру проекта Gradle
+!gradle/
+!gradle/**
+!gradlew
+!gradlew.bat
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+# Разрешить исходный код и тесты
+!src/
+!src/**
+
+# Разрешить конфигурационные файлы Gradle
+!build.gradle
+!settings.gradle
+!gradle.properties
