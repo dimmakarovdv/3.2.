@@ -4,15 +4,14 @@ import com.codeborne.selenide.SelenideElement;
 import static com.codeborne.selenide.Selenide.$;
 
 public class VerificationPage {
-    private SelenideElement verificationCodeInput = $("input[name='code']");
-    private SelenideElement actionVerifyButton = $("[data-test-id=action-verify]");
+    private SelenideElement codeField = $("[data-test-id=code] input");
+    private SelenideElement verifyButton = $("[data-test-id=action-verify]");
 
-    public void fillVerificationForm(String code) {
-        verificationCodeInput.setValue(code);
-        actionVerifyButton.click();
+    public void enterCode(String code) {
+        codeField.setValue(code);
     }
 
-    public DashboardPage verifyAndProceedToDashboard() {
-        return new DashboardPage();
+    public void verify() {
+        verifyButton.click();
     }
 }
