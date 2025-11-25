@@ -2,30 +2,38 @@ package ru.netology.page;
 
 import com.codeborne.selenide.SelenideElement;
 import java.time.Duration;
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.*;
 
 public class LoginPage {
-    private final SelenideElement usernameField = $("[data-test-id=login] input");
-    private final SelenideElement passwordField = $("[data-test-id=password] input");
-    private final SelenideElement loginButton = $("[data-test-id=action-login]");
-    private final SelenideElement errorNotification = $("[data-test-id=error-notification]");
-    private final SelenideElement loginPageHeader = $("h1");
+    private SelenideElement loginField = $("[data-test-id=login] input");
+    private SelenideElement passwordField = $("[data-test-id=password] input");
+    private SelenideElement loginButton = $("[data-test-id=action-login]");
+    private SelenideElement errorNotification = $("[data-test-id=error-notification]");
+    private SelenideElement loginPageHeader = $("h2");
 
     public void waitForPageToLoad() {
         loginPageHeader.shouldBe(visible, Duration.ofSeconds(20));
-        usernameField.shouldBe(visible, Duration.ofSeconds(15));
+        loginField.shouldBe(visible, Duration.ofSeconds(15));
         passwordField.shouldBe(visible, Duration.ofSeconds(15));
         loginButton.shouldBe(visible, Duration.ofSeconds(15));
     }
 
-    public void login(String username, String password) {
-        usernameField.setValue(username);
+    public void login(String login, String password) {
+        // Очищаем поля перед вводом новых данных
+        loginField.clear();
+        passwordField.clear();
+
+        loginField.setValue(login);
         passwordField.setValue(password);
         loginButton.click();
+
+        // Даем время на обработку формы
+        sleep(2000);
     }
 
-    public boolean isErrorNotificationVisible() {
+    // Добавляем недостающие методы
+    public boolean isErrorVisible() {
         try {
             errorNotification.shouldBe(visible, Duration.ofSeconds(10));
             return true;
@@ -34,8 +42,24 @@ public class LoginPage {
         }
     }
 
-    public String getErrorNotificationText() {
-        errorNotification.shouldBe(visible, Duration.ofSeconds(10));
-        return errorNotification.getText();
+    public String getErrorMessage() {
+        return errorNotification.shouldBe(visible, Duration.ofSeconds(10)).getText();
+    }
+
+    public boolean isBlockedMessageVisible() {
+        try {
+            errorNotification.shouldBe(visible, Duration.ofSeconds(10));
+            String errorMessage = errorNotification.getText().toLowerCase();
+            return errorMessage.contains("заблокирован");
+        } catch (Throwable e) {
+            return false;
+        }
+    }
+    private void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

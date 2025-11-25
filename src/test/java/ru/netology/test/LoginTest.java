@@ -46,32 +46,16 @@ public class LoginTest {
     @Test
     void shouldBlockUserAfterThreeFailedAttempts() {
         LoginPage loginPage = new LoginPage();
-        String validLogin = DataHelper.getValidLogin();
 
-        // Три неудачные попытки входа
         for (int i = 1; i <= 3; i++) {
-            loginPage.login(validLogin, DataHelper.getInvalidPassword() + i);
+            loginPage.login("vasya", "invalid_password_" + i);
 
             if (i < 3) {
-                boolean isErrorVisible = loginPage.isErrorNotificationVisible();
-                assertTrue(isErrorVisible, "Ошибка не появилась на попытке #" + i);
-
-                String errorText = loginPage.getErrorNotificationText();
-                assertTrue(errorText.contains("Неверно указан логин или пароль") ||
-                                errorText.contains("Ошибка") ||
-                                errorText.contains("Неверный"),
-                        "Неверный текст ошибки на попытке #" + i + ": " + errorText);
-                sleep(5000);
+                assertTrue(loginPage.isErrorVisible(), "Ошибка не отображается при попытке ввода данных #" + i);
+                assertTrue(loginPage.getErrorMessage().contains("Неверно указан логин или пароль"));
             } else {
-                boolean isBlocked = loginPage.isErrorNotificationVisible();
-                assertTrue(isBlocked, "Сообщение о блокировке не отобразилось");
-
-                String blockText = loginPage.getErrorNotificationText();
-                assertTrue(blockText.contains("заблокирован") ||
-                                blockText.contains("блокировка") ||
-                                blockText.contains("blocked") ||
-                                blockText.contains("Ошибка"),
-                        "Неверный текст блокировки: " + blockText);
+                assertTrue(loginPage.isBlockedMessageVisible(), "Сообщение о блокировке не отображается");
+                assertTrue(loginPage.getErrorMessage().contains("заблокирован"));
             }
         }
     }
