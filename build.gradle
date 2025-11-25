@@ -23,7 +23,6 @@ dependencies {
     testImplementation 'commons-dbutils:commons-dbutils:1.7'
     testImplementation 'org.apache.commons:commons-dbcp2:2.9.0'
     testImplementation 'org.slf4j:slf4j-simple:1.7.36'
-    testImplementation 'org.seleniumhq.selenium:selenium-devtools-v117:4.11.0'
 }
 
 test {
