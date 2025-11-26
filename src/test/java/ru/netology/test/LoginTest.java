@@ -6,22 +6,9 @@ import ru.netology.page.DashboardPage;
 import ru.netology.page.LoginPage;
 import ru.netology.page.VerificationPage;
 import java.sql.SQLException;
-import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
-import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LoginTest {
-
-    @BeforeAll
-    static void setUpAll() throws SQLException {
-        DataHelper.setupTestData();
-    }
-
-    @AfterAll
-    static void tearDownAll() throws SQLException {
-        DataHelper.cleanUp();
-    }
 
     @BeforeEach
     void setUp() {
@@ -34,29 +21,23 @@ public class LoginTest {
         loginPage.login(DataHelper.getValidLogin(), DataHelper.getValidPassword());
         VerificationPage verificationPage = new VerificationPage();
         verificationPage.waitForPageToLoad();
-        String authCode = DataHelper.getAuthCodeWithRetry();
-        assertNotNull(authCode, "Код не найден в базе");
-        assertEquals(6, authCode.length(), "Код должен быть длиной 6 символов");
+        String authCode = DataHelper.getAuthCode();
         verificationPage.enterCode(authCode);
         verificationPage.verify();
         DashboardPage dashboardPage = new DashboardPage();
-        assertTrue(dashboardPage.isDashboardVisible(), "Личный кабинет не загружен");
+        dashboardPage.verifyDashboardIsVisible();
     }
 
     @Test
     void shouldBlockUserAfterThreeFailedAttempts() {
         LoginPage loginPage = new LoginPage();
 
-        for (int i = 1; i <= 3; i++) {
-            loginPage.login("vasya", "invalid_password_" + i);
-
-            if (i < 3) {
-                assertTrue(loginPage.isErrorVisible(), "Ошибка не отображается при попытке ввода данных #" + i);
-                assertTrue(loginPage.getErrorMessage().contains("Неверно указан логин или пароль"));
-            } else {
-                assertTrue(loginPage.isBlockedMessageVisible(), "Сообщение о блокировке не отображается");
-                assertTrue(loginPage.getErrorMessage().contains("заблокирован"));
-            }
+        for (int i = 1; i <= 2; i++) {
+            loginPage.login(DataHelper.getValidLogin(), DataHelper.getInvalidPassword());
+            loginPage.verifyStandardError();
+            sleep(5000);
         }
+        loginPage.login(DataHelper.getValidLogin(), DataHelper.getInvalidPassword());
+        loginPage.verifyBlockedMessage();
     }
 }

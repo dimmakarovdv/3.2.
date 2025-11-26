@@ -25,29 +25,6 @@ public class DatabaseHelper {
         return dataSource;
     }
 
-    public static void clearAllTables() throws SQLException {
-        try (Connection conn = dataSource.getConnection()) {
-            runner.update(conn, "DELETE FROM auth_codes");
-            runner.update(conn, "DELETE FROM card_transactions");
-            runner.update(conn, "DELETE FROM cards");
-            runner.update(conn, "DELETE FROM users");
-        }
-    }
-
-    public static void createTestUser() throws SQLException {
-        try (Connection conn = dataSource.getConnection()) {
-            String checkUserSql = "SELECT COUNT(*) as count FROM users WHERE login = ?";
-            Long count = runner.query(conn, checkUserSql, new ScalarHandler<>(), "vasya");
-            if (count == null || count == 0) {
-                String sql = "INSERT INTO users(id, login, password, status) VALUES (?, ?, ?, 'active')";
-                runner.update(conn, sql,
-                        "123e4567-e89b-12d3-a456-426614174000",
-                        "vasya",
-                        "$2a$10$Y3oH7lY5vDgGZ1n8QY3j.eXcXyZ5Z3Z3Z3Z3Z3Z3Z3Z3Z3Z3Z");
-            }
-        }
-    }
-
     public static String getLastAuthCodeForUser(String username) throws SQLException {
         try (Connection conn = dataSource.getConnection()) {
             String query = "SELECT ac.code " +

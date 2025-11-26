@@ -1,25 +1,36 @@
 # Игнорировать всё по умолчанию
 *
 
-# Явно разрешить необходимые файлы и папки
-!.gitignore
-!docker-compose.yml*
+# Разрешить файлы в корне проекта
+!docker-compose.yml
 !app-deadline.jar
 !schema.sql
-
-# Разрешить структуру проекта Gradle
-!gradle/
-!gradle/**
-!gradlew
-!gradlew.bat
-!gradle-wrapper.jar
-!gradle-wrapper.properties
-
-# Разрешить исходный код и тесты
-!src/
-!src/**
-
-# Разрешить конфигурационные файлы Gradle
 !build.gradle
-!settings.gradle
-!gradle.properties
+
+# Разрешить директории, где находятся нужные Java-файлы
+!src/
+!src/test/
+!src/test/java/
+!src/test/java/ru/
+!src/test/java/ru/netology/
+!src/test/java/ru/netology/test/
+!src/test/java/ru/netology/page/
+!src/test/java/ru/netology/db/
+!src/test/java/ru/netology/data/
+
+# Разрешить конкретные Java-файлы
+!src/test/java/ru/netology/test/LoginTest.java
+!src/test/java/ru/netology/page/VerificationPage.java
+!src/test/java/ru/netology/page/LoginPage.java
+!src/test/java/ru/netology/page/DashboardPage.java
+!src/test/java/ru/netology/db/DatabaseHelper.java
+!src/test/java/ru/netology/data/DataHelper.java
+
+# Игнорировать всё остальное в разрешённых директориях
+src/**/*
+!src/test/java/ru/netology/test/LoginTest.java
+!src/test/java/ru/netology/page/VerificationPage.java
+!src/test/java/ru/netology/page/LoginPage.java
+!src/test/java/ru/netology/page/DashboardPage.java
+!src/test/java/ru/netology/db/DatabaseHelper.java
+!src/test/java/ru/netology/data/DataHelper.java

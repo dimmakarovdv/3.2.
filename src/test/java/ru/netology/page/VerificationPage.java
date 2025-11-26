@@ -18,11 +18,11 @@ public class VerificationPage {
     }
 
     public void enterCode(String code) {
-        codeField.shouldBe(visible, Duration.ofSeconds(20)).setValue(code);
+        codeField.setValue(code);
     }
 
     public void verify() {
-        verifyButton.shouldBe(visible, Duration.ofSeconds(20)).click();
-        sleep(20000);
+        verifyButton.click();
+        $("h2").shouldBe(visible, Duration.ofSeconds(30));
     }
 }
