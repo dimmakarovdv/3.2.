@@ -2,7 +2,8 @@ package ru.netology.page;
 
 import com.codeborne.selenide.SelenideElement;
 import java.time.Duration;
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
 
 public class LoginPage {
@@ -25,9 +26,9 @@ public class LoginPage {
         loginButton.click();
     }
 
-    public void verifyStandardError() {
+    public void verifyErrorNotification() {
         errorNotification.shouldBe(visible, Duration.ofSeconds(20))
-                .shouldHave(text("Неверно указан логин или пароль"), Duration.ofSeconds(20));
+                .shouldHave(text("Неверно указан логин или пароль"));
     }
 
     public void verifyBlockedMessage() {

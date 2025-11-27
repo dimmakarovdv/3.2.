@@ -22,10 +22,9 @@ dependencies {
     testImplementation 'mysql:mysql-connector-java:8.0.33'
     testImplementation 'commons-dbutils:commons-dbutils:1.7'
     testImplementation 'org.apache.commons:commons-dbcp2:2.9.0'
-    testImplementation 'org.slf4j:slf4j-simple:2.0.13'
+    testImplementation 'org.slf4j:slf4j-simple:1.7.36'
 }
 
 test {
     useJUnitPlatform()
-    systemProperty "file.encoding", "UTF-8"
 }

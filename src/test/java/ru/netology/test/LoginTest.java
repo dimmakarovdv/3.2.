@@ -31,11 +31,9 @@ public class LoginTest {
     @Test
     void shouldBlockUserAfterThreeFailedAttempts() {
         LoginPage loginPage = new LoginPage();
-
-        for (int i = 1; i <= 2; i++) {
+        for (int i = 0; i < 2; i++) {
             loginPage.login(DataHelper.getValidLogin(), DataHelper.getInvalidPassword());
-            loginPage.verifyStandardError();
-            sleep(5000);
+            loginPage.verifyErrorNotification();
         }
         loginPage.login(DataHelper.getValidLogin(), DataHelper.getInvalidPassword());
         loginPage.verifyBlockedMessage();
