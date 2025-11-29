@@ -7,11 +7,11 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
 
 public class LoginPage {
-    private SelenideElement loginField = $("[data-test-id=login] input");
-    private SelenideElement passwordField = $("[data-test-id=password] input");
-    private SelenideElement loginButton = $("[data-test-id=action-login]");
-    private SelenideElement errorNotification = $("[data-test-id=error-notification]");
-    private SelenideElement loginPageHeader = $("h2");
+    private final SelenideElement loginField = $("[data-test-id=login] input");
+    private final SelenideElement passwordField = $("[data-test-id=password] input");
+    private final SelenideElement loginButton = $("[data-test-id=action-login]");
+    private final SelenideElement errorNotification = $("[data-test-id=error-notification]");
+    private final SelenideElement loginPageHeader = $("h2");
 
     public void waitForPageToLoad() {
         loginPageHeader.shouldBe(visible, Duration.ofSeconds(20));
@@ -21,18 +21,15 @@ public class LoginPage {
     }
 
     public void login(String login, String password) {
+        loginField.clear();
+        passwordField.clear();
         loginField.setValue(login);
         passwordField.setValue(password);
         loginButton.click();
     }
 
-    public void verifyErrorNotification() {
+    public void verifyErrorNotification(String expectedText) {
         errorNotification.shouldBe(visible, Duration.ofSeconds(20))
-                .shouldHave(text("Неверно указан логин или пароль"));
-    }
-
-    public void verifyBlockedMessage() {
-        errorNotification.shouldBe(visible, Duration.ofSeconds(20))
-                .shouldHave(text("заблокирован"));
+                .shouldHave(text(expectedText));
     }
 }

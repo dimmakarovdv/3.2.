@@ -8,6 +8,7 @@ import ru.netology.page.VerificationPage;
 import java.sql.SQLException;
 import static com.codeborne.selenide.Selenide.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LoginTest {
 
     @BeforeEach
@@ -18,10 +19,11 @@ public class LoginTest {
     @Test
     void shouldSuccessfullyLoginWithAuthCodeFromDatabase() throws SQLException {
         LoginPage loginPage = new LoginPage();
+        loginPage.waitForPageToLoad();
         loginPage.login(DataHelper.getValidLogin(), DataHelper.getValidPassword());
         VerificationPage verificationPage = new VerificationPage();
         verificationPage.waitForPageToLoad();
-        String authCode = DataHelper.getAuthCode();
+        String authCode = DataHelper.getLatestAuthCode();
         verificationPage.enterCode(authCode);
         verificationPage.verify();
         DashboardPage dashboardPage = new DashboardPage();
@@ -31,11 +33,14 @@ public class LoginTest {
     @Test
     void shouldBlockUserAfterThreeFailedAttempts() {
         LoginPage loginPage = new LoginPage();
+        loginPage.waitForPageToLoad();
         for (int i = 0; i < 2; i++) {
-            loginPage.login(DataHelper.getValidLogin(), DataHelper.getInvalidPassword());
-            loginPage.verifyErrorNotification();
+            loginPage.login(DataHelper.getValidLogin(), "pass1" + i);
+            loginPage.verifyErrorNotification("Неверно указан логин или пароль");
+            open("http://localhost:9999");
+            loginPage.waitForPageToLoad();
         }
-        loginPage.login(DataHelper.getValidLogin(), DataHelper.getInvalidPassword());
-        loginPage.verifyBlockedMessage();
+        loginPage.login(DataHelper.getValidLogin(), "pass4");
+        loginPage.verifyErrorNotification("Пользователь заблокирован");
     }
 }

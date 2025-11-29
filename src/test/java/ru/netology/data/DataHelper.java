@@ -12,11 +12,7 @@ public class DataHelper {
         return "qwerty123";
     }
 
-    public static String getInvalidPassword() {
-        return "pass1";
-    }
-
-    public static String getAuthCode() throws SQLException {
-        return DatabaseHelper.getLastAuthCodeForUser(getValidLogin());
+    public static String getLatestAuthCode() throws SQLException {
+        return DatabaseHelper.getLatestAuthCode(getValidLogin());
     }
 }

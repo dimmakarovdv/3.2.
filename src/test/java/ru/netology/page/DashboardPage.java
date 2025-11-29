@@ -11,6 +11,6 @@ public class DashboardPage {
 
     public void verifyDashboardIsVisible() {
         dashboardHeader.shouldBe(visible, Duration.ofSeconds(30))
-                .shouldHave(text("Интернет Банк"));
+                .shouldHave(text("Личный кабинет"));
     }
 }

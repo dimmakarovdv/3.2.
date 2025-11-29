@@ -21,11 +21,7 @@ public class DatabaseHelper {
         dataSource = ds;
     }
 
-    public static DataSource getDataSource() {
-        return dataSource;
-    }
-
-    public static String getLastAuthCodeForUser(String username) throws SQLException {
+    public static String getLatestAuthCode(String username) throws SQLException {
         try (Connection conn = dataSource.getConnection()) {
             String query = "SELECT ac.code " +
                     "FROM auth_codes ac " +
@@ -34,9 +30,6 @@ public class DatabaseHelper {
                     "ORDER BY ac.created DESC " +
                     "LIMIT 1";
             return runner.query(conn, query, new ScalarHandler<>(), username);
-        } catch (SQLException e) {
-            System.err.println("Ошибка при получении кода: " + e.getMessage());
-            return null;
         }
     }
 }
